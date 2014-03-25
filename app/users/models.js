@@ -4,8 +4,8 @@ var mongoose = require('mongoose')
   , oAuthTypes = ['twitter', 'facebook'];
 
 var UserSchema = new(mongoose.Schema)({
-  name: {type: String, default: ''},
-  email: {type: String, default: ''},
+  name: {type: String, trim: true, default: ''},
+  email: {type: String, lowercase: true, trim: true, default: ''},
   hash: {type: String, default: ''},
   salt: {type: String, default: ''},
 });
@@ -20,7 +20,7 @@ UserSchema
   .get(function() { 
       return this._password;
   });
-   
+
 UserSchema.methods = {
   authenticate: function(password) {
     return this.genHash(password) == this.hash;
@@ -35,4 +35,12 @@ UserSchema.methods = {
   },
 };
 
-mongoose.model('User', UserSchema);
+var User = mongoose.model('User', UserSchema);
+UserSchema.path('email').validate(function(email, fn) {
+  if (this.isNew || this.isModified('email')) {
+    User.find({ email: email }).exec(function(err, users) {
+      fn(!err && users.length == 0);
+    });
+  } else 
+    fn(true);
+}, 'Email alredy taken');
