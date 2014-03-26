@@ -10,6 +10,7 @@ config(app, passport);
 
 routes = [
   './app/users/routes',
+  './app/devices/routes',
 ];
 
 routes.forEach(function(path) {
