@@ -14,6 +14,7 @@ module.exports = (function(app) {
     
     phone.save(function(err) {
       if (err) {
+	res.json(err);
 	return;
       }
       
@@ -23,9 +24,11 @@ module.exports = (function(app) {
       device = new(Device)(device);
       device.save(function(err) {
 	if (err) {
+	  res.json(err);
 	  phone.remove(function(err) {});
 	  return;
 	}
+	res.json(device);
       });
     });
   });

@@ -18,3 +18,4 @@ DeviceSchema.path('name').validate(function(name, fn) {
   } else 
     fn(true);
 }, 'Duplicated device name');
+
