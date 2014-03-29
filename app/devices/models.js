@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
+var db = require('mongoose');
 
-var ObjectId = mongoose.Schema.ObjectId;
-var DeviceSchema = new(mongoose.Schema)({
+var ObjectId = db.Schema.ObjectId;
+var Schema = new(db.Schema)({
   name: {type: String, trim: true, required: true},
   description: {type: String, trim: true, required: true},
   user: {type: ObjectId, ref: 'User', required: true},
@@ -9,8 +9,21 @@ var DeviceSchema = new(mongoose.Schema)({
   key: {type: ObjectId, ref: 'Key'},
 });
 
-var Device = mongoose.model('Device', DeviceSchema);
-DeviceSchema.path('name').validate(function(name, fn) {
+var Device = db.model('Device', Schema);
+Schema.pre('save', function(next) {
+  var Key = db.model('Key'), that = this, key;
+  
+  key = new(Key);
+  key.save(function(err) {
+    if (err) {
+      return next(err);
+    }
+    that.key = key;
+    next();
+  });
+});
+
+Schema.path('name').validate(function(name, fn) {
   if (this.isNew || this.isModified('name')) {
     Device.find({name: name, user: this.user}).exec(function(err, devices) {
       fn(!err && devices.length == 0);
