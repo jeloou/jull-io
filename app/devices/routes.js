@@ -17,4 +17,39 @@ module.exports = (function(app) {
       res.json(device);
     });
   });
+  
+  app.get('/devices', auth.requiresLogin, function(req, res) {
+    var user = req.user;
+    
+    Device.find({user: user}, function(err, devices) {
+      if (err) {
+	res.send(500, 'Something went wrong');
+	return;
+      }
+      
+      res.json(devices);
+    });
+  });
+  
+  app.get('/devices/:key', auth.requiresLogin, function(req, res) {
+    var user, key;
+
+    key = req.params.key;
+    user = req.user;
+    
+    Device.findOne(
+      {user: user, 'key.key': key}, function(err, device) {
+	if (err) {
+	  res.send(500, 'Something went wrong');
+	  return;
+	}
+	
+	if (!device) {
+	  res.send(404, 'Oops, we could\'nt find that');
+	  return;
+	}
+	
+	res.json(device);
+      });
+  });
 });
