@@ -1,7 +1,8 @@
 var mongoose = require('mongoose')
   , auth = require('../middlewares/authorization')
   , Device = mongoose.model('Device')
-  , Phone = mongoose.model('Phone');
+  , Phone = mongoose.model('Phone')
+  , _ = require('underscore');
 
 module.exports = (function(app) {
   app.post('/devices', auth.requiresLogin, function(req, res) {
@@ -52,4 +53,54 @@ module.exports = (function(app) {
 	res.json(device);
       });
   });
+
+  app.put('/devices/:key', auth.requiresLogin, function(req, res) {
+    var user, keys, key;
+    
+    user = req.user;
+    key = req.params.key;
+    
+    Device.findOne(
+      {user: user, 'key.key': key}, function(err, device) {
+	var _device, keys = [
+	  'name', 'description',
+	];
+	
+	if (err) {
+	  res.send(500, 'Something went wrong');
+	  return;
+	}
+	
+	if (!device) {
+	  res.send(404, 'Oops, we could\'nt find that');
+	  return;
+	}
+	
+	_device = _.pick(req.body, keys);
+	_device = _.chain(_device)
+	  .pick(req.body, keys)
+	  .pairs()
+	  .filter(function(e) {
+	    return device[e[0]] !== e[1];
+	  }).value();
+	
+	if (_.isEmpty(_device)) {
+	  res.send(304);
+	  return;
+	}
+	
+	_.each(_device, function(e) {
+	  device[e[0]] = e[1];
+	});
+	  
+	device.save(function(err) {
+	  if (err) {
+	    res.send(500, 'Something went wrong');
+	    return;
+	  }
+	  res.json(device);
+	});
+      });
+  });
+  
 });

@@ -12,7 +12,7 @@ var Schema = new(db.Schema)({
 var Device = db.model('Device', Schema);
 Schema.pre('save', function(next) {
   var genCredentials, key, token, that = this;
-  
+
   if (!this.isNew) {
     return next();
   }
