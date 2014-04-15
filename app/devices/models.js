@@ -22,7 +22,7 @@ Schema.pre('save', function(next) {
     token = genToken();
     
     Device.find(
-      {'key.key': key, 'key.token': token}, function(err, devices) {
+      {'key.key': key}, function(err, devices) {
 	if (err) {
 	  next(err);
 	  return;
