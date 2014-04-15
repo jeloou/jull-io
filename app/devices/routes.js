@@ -103,4 +103,32 @@ module.exports = (function(app) {
       });
   });
   
+  app.delete('/devices/:key', auth.requiresLogin, function(req, res) {
+    var user, key;
+
+    user = req.user;
+    key = req.params.key;
+    
+    Device.findOne(
+      {user: user, 'key.key': key}, function(err, device) {
+	if (err) {
+	  res.send(500, 'Something went wrong');
+	  return;
+	}
+	
+	if (!device) {
+	  res.send(404, 'Oops, we could\'nt find that');
+	  return;
+	}
+	
+	device.remove(function(err) {
+	  if (err) {
+	    res.send(500, 'Something went wrong');
+	    return;
+	  }
+	  
+	  res.send(200);
+	});
+      });
+  });
 });
