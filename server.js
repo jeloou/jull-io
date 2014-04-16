@@ -14,6 +14,7 @@ io = require('socket.io').listen(server);
 config(app, io, passport);
 
 routes = [
+  './app/web/routes',
   './app/users/routes',
   './app/devices/routes',
 ];

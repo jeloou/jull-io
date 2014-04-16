@@ -3,6 +3,7 @@ var express = require('express')
   , mongoStore = require('connect-mongo')(express)
   , LocalStrategy = require('passport-local').Strategy
   , SessionSockets = require('session.socket.io')
+  , socket = require('./lib/socket')
   , path = require('path')
   , fs = require('fs');
 
@@ -18,7 +19,6 @@ sessionStore = new(mongoStore)({
 });
 
 module.exports = function(app, io, passport) {
-  console.log(io);
   var User, connect, app_path;
 
   connect = function() {
@@ -89,7 +89,7 @@ module.exports = function(app, io, passport) {
     app.use(express.static(config.root + '/public'));
   */
 
-  app.set('views', './app/views');
+  app.set('views', __dirname + '/views');
   app.set('view engine', 'jade')
 
   app.configure(function () {
@@ -114,6 +114,8 @@ module.exports = function(app, io, passport) {
   app.use(passport.session());
   
   app.use(app.router);
+  app.use(express.static(path.join(__dirname, 'public')));
+  
   app.use(function(err, req, res, next) {
     // treat as 404
     if (err.message
@@ -127,8 +129,11 @@ module.exports = function(app, io, passport) {
     console.error(err.stack)
     
     // error page
-    res.status(500).render('500', { error: err.stack })
+    res.status(500).render('500', { 
+      error: err.stack 
+    });
   });
   
   io = new(SessionSockets)(io, sessionStore, cookieParser, EXPRESS_SID_KEY);
+  socket(io);
 };

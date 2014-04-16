@@ -1,13 +1,13 @@
 var mongoose = require('mongoose')
-  , User = mongoose.model('User');
+  , User = mongoose.model('User')
+  , auth = require('../middlewares/authorization');
 
 module.exports = (function(app, passport) {
   app.post('/users/login', 
     passport.authenticate('local', {
       failureRedirect: '/login',
-      failureFlash: 'Invalid email or password.',
     }), function(req, res) {
-      res.send('Welcome!');
+      res.redirect('/');
   });
   
   app.post('/users', function(req, res) {
@@ -21,8 +21,7 @@ module.exports = (function(app, passport) {
     });
   });
 
-  app.get('/users/me', function(req, res) {
+  app.get('/users/me', auth.requiresLogin, function(req, res) {
     res.send(req.user);
   });
-
 });
