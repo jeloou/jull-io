@@ -2,24 +2,28 @@ var express = require('express')
   , mongoose = require('mongoose')
   , mongoStore = require('connect-mongo')(express)
   , LocalStrategy = require('passport-local').Strategy
+  , SessionSockets = require('session.socket.io')
   , path = require('path')
-  , fs = require('fs')
-  , env = process.env.NODE_ENV || 'dev';
+  , fs = require('fs');
 
-var config = {
-  dev: { 
-    db: 'mongodb://localhost/dev'
-  },
-  pro: {},
-  test: {},
-};
+var EXPRESS_SID_KEY = '_jull.io_sess'
+  , COOKIE_SECRET = 'very secret string';
 
-module.exports = function(app, passport) {
+var cookieParser = express.cookieParser(COOKIE_SECRET)
+  , sessionStore;
+
+sessionStore = new(mongoStore)({
+  url: 'mongodb://localhost/dev',
+  collection : 'sessions'
+});
+
+module.exports = function(app, io, passport) {
+  console.log(io);
   var User, connect, app_path;
 
   connect = function() {
     var options = { server: { socketOptions: { keepAlive: 1 } } }
-    mongoose.connect(config[env].db, options);
+    mongoose.connect('mongodb://localhost/dev', options);
   };
   connect();
 
@@ -80,14 +84,17 @@ module.exports = function(app, passport) {
   }));
 
   app.use(express.favicon());
-  app.use(express.static(config.root + '/public'));
+  /*
+    I'll solve this later
+    app.use(express.static(config.root + '/public'));
+  */
 
   app.set('views', './app/views');
   app.set('view engine', 'jade')
 
   app.configure(function () {
     // cookieParser should be above session
-    app.use(express.cookieParser());
+    app.use(cookieParser);
       
     // bodyParser should be above methodOverride
     app.use(express.bodyParser())
@@ -95,14 +102,14 @@ module.exports = function(app, passport) {
 
     // express/mongo session storage
     app.use(express.session({
-      secret: 'App',
-      store: new(mongoStore)({
-	url: config[env].db,
-	collection : 'sessions'
-      })
+      key: EXPRESS_SID_KEY,
+      store: sessionStore,
+      cookie: {
+	httpOnly: true
+      },
     }));
   });
-
+  
   app.use(passport.initialize());
   app.use(passport.session());
   
@@ -123,4 +130,5 @@ module.exports = function(app, passport) {
     res.status(500).render('500', { error: err.stack })
   });
   
+  io = new(SessionSockets)(io, sessionStore, cookieParser, EXPRESS_SID_KEY);
 };

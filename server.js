@@ -3,10 +3,15 @@
 var express = require('express')
   , passport = require('passport')
   , config = require('./config')
+  , http = require('http')
   , app = express()
-  , routes;
+  , server
+  , routes
+  , io;
 
-config(app, passport);
+server = http.createServer(app);
+io = require('socket.io').listen(server);
+config(app, io, passport);
 
 routes = [
   './app/users/routes',
@@ -17,10 +22,10 @@ routes.forEach(function(path) {
   require(path)(app, passport);
 });
 
-app.listen(3000, '127.0.0.1', function(err) {
+server.listen(3000, function(err) {
   if (err) {
-      console.error('Unable to listen for connections', err);
-      process.exit(10);
+    console.error('Unable to listen for connections', err);
+    process.exit(10);
   }
   console.info('App running');
 });
