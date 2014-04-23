@@ -3,6 +3,7 @@ var express = require('express')
   , mongoStore = require('connect-mongo')(express)
   , LocalStrategy = require('passport-local').Strategy
   , SessionSockets = require('session.socket.io')
+  , ascoltatori = require('ascoltatori')
   , socket = require('./lib/socket')
   , path = require('path')
   , fs = require('fs');
@@ -135,5 +136,13 @@ module.exports = function(app, io, passport) {
   });
   
   io = new(SessionSockets)(io, sessionStore, cookieParser, EXPRESS_SID_KEY);
-  socket(io);
+  var settings = {
+    type: 'redis',
+    host: 'localhost',
+    port: 6379,
+  };
+  
+  ascoltatori.build(settings, function(ascoltatore) {
+    socket(io, ascoltatore);
+  });
 };
