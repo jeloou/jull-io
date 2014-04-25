@@ -20,7 +20,7 @@ routes = [
 ];
 
 routes.forEach(function(path) {
-  require(path)(app, passport);
+  require(path).apply(app, passport);
 });
 
 server.listen(3000, function(err) {
