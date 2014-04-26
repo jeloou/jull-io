@@ -1,6 +1,7 @@
 var db = require('mongoose')
   , uuid = require('node-uuid')
-  , _ = require('underscore')._;
+  , _ = require('underscore')._
+  , isKey = require('../../lib/utils').isKey;
 
 var ObjectId = db.Schema.ObjectId;
 var Schema = new(db.Schema)({
@@ -257,13 +258,4 @@ function genToken() {
     return Math.random().toString(36).substr(2); 
   };
   return rand() + rand();
-}
-
-function isKey(key) {
-  if (toString.call(key) === '[object String]') {
-    if (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(key)) {
-      return true;
-    }
-  }
-  return false;
 }

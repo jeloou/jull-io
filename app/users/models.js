@@ -1,6 +1,7 @@
 
 var db = require('mongoose')
-  , crypto = require('crypto');
+  , crypto = require('crypto')
+  , _ = require('underscore')._;
 
 var Schema = new(db.Schema)({
   name: {type: String, trim: true, default: ''},
@@ -20,6 +21,26 @@ Schema
   .get(function() { 
       return this._password;
   });
+
+Schema.statics.owns = function(user, keys, fn) {
+  if (_.isString(keys)) {
+    keys = [keys];
+  }
+  
+  this.findOne(
+    {_id: user, devices: {$all: keys}}, function(err, user) {
+      if (err) {
+	fn({
+	  message: 'something went wrong',
+	  code: 500
+	});
+	return;
+      }
+      
+      fn(null, user !== null);
+    }
+  );
+};
 
 Schema.methods = {
   authenticate: function(password) {
