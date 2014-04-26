@@ -16,11 +16,11 @@ config(app, io, passport);
 routes = [
   './app/web/routes',
   './app/users/routes',
-  './app/devices/routes',
+  './app/things/routes',
 ];
 
 routes.forEach(function(path) {
-  require(path).apply(app, passport);
+  require(path)(app, passport);
 });
 
 server.listen(3000, function(err) {
