@@ -20,7 +20,7 @@ module.exports = (function(app) {
 
 	res.json(thing);
       }
-    )
+    );
   });
   
   app.get('/things/:key', auth.requiresLogin, function(req, res) {

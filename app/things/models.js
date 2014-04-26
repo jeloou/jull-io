@@ -82,8 +82,8 @@ Schema.statics.modify = function(args, fn) {
   var user, key, payload;
   
   user = args.user;
-  key = args.key;
   payload = args.payload;
+  key = args.key || payload.key;
 
   this.findOne(
     {user: user, 'key.key': key}, function(err, thing) {
