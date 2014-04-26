@@ -37,6 +37,14 @@ Schema.statics.get = function(args, fn) {
   user = args.user;
   key = args.key;
   
+  if (!isKey(key)) {
+    fn({
+      message: 'that doesn\'t look look like a valid key',
+      code: 400
+    });
+    return;
+  }
+  
   this.findOne(
     {user: user, 'key.key': key}, function(err, thing) {
       if (err) {
@@ -49,7 +57,7 @@ Schema.statics.get = function(args, fn) {
       
       if (!thing) {
 	fn({
-	  message: 'Oops, we could\'nt find that',
+	  message: 'Oops, we couldn\'t find that',
 	  code: 404
 	});
 	return;
@@ -84,6 +92,14 @@ Schema.statics.modify = function(args, fn) {
   user = args.user;
   payload = args.payload;
   key = args.key || payload.key;
+  
+  if (!isKey(key)) {
+    fn({
+      message: 'that doesn\'t look look like a valid key',
+      code: 400
+    });
+    return;
+  }
 
   this.findOne(
     {user: user, 'key.key': key}, function(err, thing) {
@@ -101,7 +117,7 @@ Schema.statics.modify = function(args, fn) {
       
       if (!thing) {
 	fn({
-	  message: 'Oops, we could\'nt find that',
+	  message: 'Oops, we couldn\'t find that',
 	  code: 404
 	});
 	return;
@@ -139,10 +155,18 @@ Schema.statics.modify = function(args, fn) {
 
 Schema.statics.remove = function(args, fn) {
   var user, key;
-    
+  
   user = args.user;
   key = args.key;
   
+  if (!isKey(key)) {
+    fn({
+      message: 'that doesn\'t look look like a valid key',
+      code: 400
+    });
+    return;
+  }
+
   this.findOne(
     {user: user, 'key.key': key}, function(err, thing) {
       if (err) {
@@ -155,7 +179,7 @@ Schema.statics.remove = function(args, fn) {
       
       if (!thing) {
 	fn({
-	  message: 'Oops, we could\'nt find that',
+	  message: 'Oops, we couldn\'t find that',
 	  code: 404
 	});
 	return;
@@ -233,4 +257,13 @@ function genToken() {
     return Math.random().toString(36).substr(2); 
   };
   return rand() + rand();
+}
+
+function isKey(key) {
+  if (toString.call(key) === '[object String]') {
+    if (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(key)) {
+      return true;
+    }
+  }
+  return false;
 }
