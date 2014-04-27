@@ -1,7 +1,7 @@
 {
   "name": "jull.io",
   "version": "0.0.0",
-  "description": "A real-time platform for geo data",
+  "description": "m2m instant messaging for moving things",
   "author": "Joseph Núñez",
   "private": true,
   "keywords": [
@@ -14,7 +14,10 @@
     "passport-local": "1.0.0",
     "jade": "0.35.0",
     "node-uuid": "~1.4.1",
-    "underscore": "1.6.0"
+    "underscore": "1.6.0",
+    "socket.io": "~0.9.16",
+    "session.socket.io": "~0.1.6",
+    "ascoltatori": "~0.13.0"
   },
   "devDependencies": {
     "mocha": "~1.13.0"

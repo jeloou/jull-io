@@ -1,0 +1,15 @@
+extend login-layout
+
+block content
+  form(method='post' action='/users/login').form-signin
+    h1.form-singin-heading log in
+    
+    input(type='text' placeholder='Email address' name='email')
+      .input-block-level
+    input(type='password' placeholder='Password' name='password')
+      .input-block-level
+  
+    label.checkbox Remember me
+      input(type='checkbox' value='remember-me') 
+    
+    button(type='submit').btn.btn-large.btn-primary Log in
