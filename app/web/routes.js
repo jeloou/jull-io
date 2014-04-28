@@ -1,7 +1,12 @@
 var auth = require('../middlewares/authorization');
 
 module.exports = (function(app) {
-  app.get('/', auth.requiresLogin, function(req, res) {
+  app.get('/', function(req, res) {
+    if (!req.user) {
+      res.render('landing');
+      return;
+    }
+    
     res.render('home');
   });
 
