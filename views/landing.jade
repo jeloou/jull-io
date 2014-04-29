@@ -1,4 +1,99 @@
 extend landing-layout
 
 block content
-  h1 Hello, world!
+  // http://www.littleco.com/
+  div(style='height: 100%;  width: 100%; z-index: -1; background-color: #333; position: absolute;')
+  .map-wrapper
+    .map-wrapper-inner
+      .map-container
+        .header.clearfix
+          .inner
+            h3.header-brand Cover
+            ul.nav.header-nav
+              li.active
+                a(ref='#') Home
+              li
+                a(ref='#') Features
+              li
+                a(ref='#') Contact
+        //
+        .inner.cover
+          h1.cover-heading Cover your page.
+          p.lead
+            | Cover is a one-page template for building simple and beautiful home pages.
+            | Download, edit the text, and add your own fullscreen background photo to 
+            | make it your own.
+          p.lead
+            a.btn.btn-lg.btn-default(href='#') Learn more
+        //
+        .footer
+          .inner
+            p  
+              | Cover template for 
+              a(href='http://getbootstrap.com') Bootstrap, 
+              | by 
+              a(href='http://twitter.com/mdo') @mdo
+              | .
+  //
+  .container.markerting(style='margin-bottom: 80px;')
+    .row.featurette
+      .col-md-7
+        h2.featurette-heading First featurette heading. 
+          span.text-muted I'll blow your mind.
+        p.lead
+          | Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta 
+          | felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. 
+          | Fusce dapibus, tellus ac cursus commodo.
+      .col-md-5
+        img.featurette-image.img-responsive(alt='500x500' src='holder.js/500x500/auto')
+    //
+    hr.featurette-divider
+    .row.featurette 
+      .col-md-5
+        img.featurette-image.img-responsive(alt='500x500' src='holder.js/500x500/auto')
+      .col-md-7
+        h2.featurette-heading Oh yeah, it's that good. 
+          span.text-muted See for yourself.
+        p.lead
+          | Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta 
+          | felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. 
+          | Fusce dapibus, tellus ac cursus commodo.
+    //
+    hr.featurette-divider
+    .row.featurette 
+      .col-md-7
+        h2.featurette-heading And lastly, this one. 
+          span.text-muted Checkmate.
+        p.lead
+          | Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta 
+          | felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. 
+          | Fusce dapibus, tellus ac cursus commodo.
+      .col-md-5
+        img.featurette-image.img-responsive(alt='500x500' src='holder.js/500x500/auto')
+  //
+  .clearfix
+  div(style='height: 100%; width: 100%; z-index: -1; background-color: #333; position: absolute;')
+  .container(style='height: 100%;')
+    .row
+      p Hello
+  //
+  .container(style='margin: 0 auto; width: 80%;')
+    .row
+      .col-lg-6
+        .input-group(style='margin: -17px auto; width: 40%;')
+          input.form-control(type='email' placeholder='Your email address')
+          span.input-group-btn
+            button.btn.btn-default(type='button') Yes, please!
+    .row(style='padding-top: 150px; padding-bottom: 150px;')
+      .col-lg-6
+        h3(style='line-height:1.3em; width: 70%; margin: 0 auto;')
+          | We'd love to hear from you! If you want to say hello, write us through
+          a.icon-mailru(href='#' target='_blank', style='diplay:inline-block; width: 23px; margin-left:8px; color: orange; text-decoration: none;')
+          |. If brevity is your thing, we're on
+          a.icon-twitter-3(href='#' target='_blank', style='diplay:inline-block; width: 23px; margin-left:8px; color: #00ACED; text-decoration: none;')
+          |.
+          | Sometimes, we build something fun and share it on 
+          a.icon-tumblr(href='#' target='_blank', style='diplay:inline-block; width: 23px; margin-left:-2px; color: #2C4762; text-decoration: none;')
+          |.
+
+  
