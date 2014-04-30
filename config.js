@@ -5,6 +5,7 @@ var express = require('express')
   , SessionSockets = require('session.socket.io')
   , ascoltatori = require('ascoltatori')
   , socket = require('./lib/socket')
+  , store = require('./lib/store')
   , path = require('path')
   , fs = require('fs');
 
@@ -145,4 +146,6 @@ module.exports = function(app, io, passport) {
   ascoltatori.build(settings, function(ascoltatore) {
     socket(io, ascoltatore);
   });
+
+  store(settings);
 };
