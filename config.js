@@ -1,5 +1,5 @@
 var express = require('express')
-  , mongoose = require('mongoose')
+  , db = require('mongoose')
   , mongoStore = require('connect-mongo')(express)
   , LocalStrategy = require('passport-local').Strategy
   , SessionSockets = require('session.socket.io')
@@ -24,17 +24,17 @@ module.exports = function(app, io, passport) {
 
   connect = function() {
     var options = { server: { socketOptions: { keepAlive: 1 } } }
-    mongoose.connect('mongodb://localhost/dev', options);
+    db.connect('mongodb://localhost/dev', options);
   };
   connect();
 
   // Error handler
-  mongoose.connection.on('error', function (err) {
+  db.connection.on('error', function (err) {
     console.log(err);
   });
 
   // Reconnect when closed
-  mongoose.connection.on('disconnected', function () {
+  db.connection.on('disconnected', function () {
     connect();
   });
     
@@ -47,7 +47,7 @@ module.exports = function(app, io, passport) {
     }
   });
 
-  User = mongoose.model('User');
+  User = db.model('User');
   
   passport.serializeUser(function(user, fn) {
     fn(null, user.id);
