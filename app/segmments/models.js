@@ -9,11 +9,30 @@ var Schema = new(db.Schema)({
     lng: Number,
     at: Date
   }],
+  distance: Number,
+  duration: Number,
   start: Date,
   end: Date,
   updated: Date,
 });
 
+Schema.statics.add = function(args, fn) {
+  var payload, user;
+  
+  payload = args.payload;
+  user = args.user;
+
+  fn();
+};
+
+Schema.statics.modify = function(args, fn) {
+  var payload, user, id;
+
+  payload = args.payload;
+  user = args.user;
+  id = args.id;
+  
+  fn();
+};
+
 db.model('Segmment', Schema);
-
-
