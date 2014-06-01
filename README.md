@@ -1,6 +1,6 @@
 # jull-io
 
-jull.io is a processing back-end and API for the mosca MQTT broker.
+jull.io is a processing back-end and API for the [mosca](https://github.com/mcollina/mosca) MQTT broker.
 
 ### What can you do with it? 
 
@@ -11,8 +11,7 @@ where, when, and how much your thing moves, along with sensor readings, speed,
 duration and distance statistics.
 
 ### Contributing 
-This project is in active development but it's not ready. Feel free to open a pull 
-request with a nice feature or a fix for some bug.
+This project is in active development but it's not ready. Feel free to open a pull request with a nice feature or a fix for some bug.
 
 ### License
 
