@@ -41,7 +41,8 @@
     "socket.io": "~0.9.16",
     "session.socket.io": "~0.1.6",
     "ascoltatori": "~0.13.0",
-    "kue": "~0.7.5"
+    "kue": "~0.7.5",
+    "moment": "~2.6.0"
   },
   "devDependencies": {
     "mocha": "~1.17.0"
