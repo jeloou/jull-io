@@ -13,7 +13,7 @@ var Schema = new(db.Schema)({
 
 
 Schema.statics.add = function(args, fn) {
-  var payload;
+  var payload, thing;
   
   payload = args.payload;
   payload.user = args.user;
