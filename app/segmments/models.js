@@ -1,6 +1,49 @@
 var db = require('mongoose')
   , moment = require('moment');
 
+const R = 6378137
+    , DEG_TO_RAD = Math.PI/180;
+
+function distanceBetween() {
+  var points = Array.prototype.slice.call(arguments)
+    , distance = 0;
+
+  var a, b, i = 0;
+  while (i < points.length) {
+    if (i == points.length-1) {
+      return distance;
+    }
+
+    a = points[i];
+    b = points[i+1];
+
+    var sin1 = Math.sin(((b.lat - a.lat) * DEG_TO_RAD)/2)
+      , sin2 = Math.sin(((b.lng - a.lng) * DEG_TO_RAD)/2);
+    
+    var v = Math.pow(sin1, 2) + Math.pow(sin2, 2) * Math.cos(a.lat * DEG_TO_RAD) * Math.cos(b.lat * DEG_TO_RAD);
+    distance += 2 * R * Math.atan2(Math.sqrt(v), Math.sqrt(1 - v));
+
+    i++;
+  }
+}
+
+function durationBetween() {
+  var dates = Array.prototype.slice.call(arguments)
+    , duration = 0;
+  
+  var a, b, i = 0;
+  while (i < dates.length) {
+    if (i == dates.length-1) {
+      return duration;
+    }
+    
+    a = dates[i];
+    b = dates[i+1];
+    
+    duration += Math.abs(a - b)/1000;
+    i++;
+  }
+}
 
 var ObjectId = db.Schema.ObjectId;
 var Schema = new(db.Schema)({
@@ -75,7 +118,7 @@ Schema.statics.modify = function(args, fn) {
   segmment = args.segmment;
   payload = args.payload;
   user = args.user;
-
+  
   if (segmment.type == 'stop') {
     segmment.points[0].at = args.at;
     segmment.save(function(err) {
@@ -90,14 +133,29 @@ Schema.statics.modify = function(args, fn) {
   }
   
   var Segmment = db.model('Segmment')
+    , last = segmment.point[0]
     , point = {
         lat: payload.lat
       , lng: payload.lng
       , at: new(Date)(args.at)
     };
   
+  var distance = segmment.distance
+    , duration = segmment.duration;
+
+  distance += distanceBetween(last, point);
+  duration += durationBetween(last.at, point.at);
+  
   Segmment.collection.update(
-    {_id: segmment._id}, {$push: {points: point}}, function(err) {
+      {_id: segmment._id}
+    , {
+        $push: {points: point}
+      , $set: {
+	  distance: distance
+	, duration: duration
+      }
+    }
+    , function(err) {
       if (err) {
 	fn(err);
 	return;
