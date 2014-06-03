@@ -8,7 +8,7 @@ var Schema = new(db.Schema)({
   email: {type: String, lowercase: true, trim: true, default: ''},
   hash: {type: String, default: ''},
   salt: {type: String, default: ''},
-  devices: [{type: String}],
+  things: [{type: String}]
 });
 
 Schema
