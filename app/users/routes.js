@@ -11,17 +11,26 @@ module.exports = (function(app, passport) {
   });
   
   app.post('/users', function(req, res) {
-    var user = new User(req.body);
-    user.save(function(err) {
+    if (req.user) {
+      res.status(403).json();
+      return;
+    }
+    
+    User.add(req.body, function(err) {
+      var that = this;
+      
       if (err) {
-	res.send('That email is already taken');
+	res.json(err.code, err);
 	return;
       }
-      res.send('Welcome!');
+      
+      req.login(this, function(err) {
+	res.json(that.toJSON());
+      });
     });
   });
-
+  
   app.get('/users/me', auth.requiresLogin, function(req, res) {
-    res.send(req.user);
+    res.json(req.user.toJSON());
   });
 });

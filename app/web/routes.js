@@ -11,6 +11,15 @@ module.exports = (function(app) {
     
     res.render('home');
   });
+  
+  app.get('/signup', function(req, res) {
+    if (req.user) {
+      res.redirect('/');
+      return;
+    }
+    
+    res.render('signup');
+  });
 
   app.get('/login', function(req, res) {
     if (req.user) {

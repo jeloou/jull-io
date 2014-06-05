@@ -1,0 +1,46 @@
+extend login-layout
+
+block content
+  form(method='post' action='/users/signup').form-signup.form-horizontal#signup
+    legend Sign up
+    .control-group
+      label.control-label Firt name
+      .controls
+        .input-prepend
+            input(type='text' placeholder='First name' name='first_name' class='input-xlarge')
+    .control-group
+      label.control-label Last name
+      .controls
+        .input-prepend
+          span.add-on
+            i.icon-user
+          input(type='text' placeholder='Last name' name='last_name' class='input-xlarge')
+    .control-group
+      label.control-label Gender
+      .controls
+        div(data-toggle='buttons').btn-group#gender
+          label.btn.btn-primary.active Male
+            input(type='radio' name='options' value='m')
+          label.btn.btn-primary Female
+            input(type='radio' name='options' value='f')
+    .control-group
+      label.control-label Email
+      .controls
+        .input-prepend
+          span.add-on
+            i.icon-envelope
+          input(type='text' placeholder='Email' name='email' class='input-xlarge')
+    .control-group
+      label.control-label Password
+      .controls
+        .input-prepend
+          span.add-on
+            i.icon-lock
+          input(type='password' placeholder='Password' name='password').input-xlarge
+    .control-group
+      label.control-label
+      .controls
+        button(type='submit').btn.btn-success.pull-right Sign up
+
+block js
+  script(src='/js/signup.js')

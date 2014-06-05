@@ -35,20 +35,24 @@ html(lang='en')
      .form-signin {
        height: 297px;
      }
-
+     
+     .form-signup {
+       height: 522px;
+     }
+     
      .form-signin input[type="text"],
-     .form-signin input[type="password"] {
+     .form-signin input[type="password"],
+     .form-signup input[type="text"],
+     .form-signup input[type="password"] {
        font-size: 16px;
        height: auto;
        margin-bottom: 15px;
        padding: 7px 9px;
      }
-
-     .form-signup input {
-       font-size: 16px;
-       height: auto;
-     }
   body
     div.container
         block content
+    script(src='/js/jquery.js')
+    script(src='/js/bootstrap.js')
+    block js
 
