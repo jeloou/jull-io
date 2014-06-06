@@ -52,7 +52,11 @@ var Schema = new(db.Schema)({
   points: [{
     lat: Number,
     lng: Number,
-    at: Date
+    at: Date,
+    events: [{
+      event: {type: String},
+      _readings: db.Schema.Types.Mixed
+    }]
   }],
   distance: {type: Number, default: 0},
   duration: {type: Number, default: 0},
