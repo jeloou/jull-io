@@ -65,6 +65,24 @@ var Schema = new(db.Schema)({
   updated: Date,
 });
 
+Schema.statics._parseEvents = function(events) {
+  return events.map(function(event) {
+    var _event = {
+      _readings: {}
+    };
+    
+    for (var k in event) {
+      if (k !== 'event') {
+	_event._readings[k] = event[k];
+	continue;
+      }
+      _event.event = event[k];
+    }
+    
+    return _event;
+  });
+};
+
 Schema.statics.add = function(args, fn) {
   var payload, user, thing, that = this;
   
@@ -72,12 +90,15 @@ Schema.statics.add = function(args, fn) {
   thing = args.thing;
   user = args.user;
   
-  var last = args.last || null;
+  var last = args.last || null
+    , events = this._parseEvents(payload.events);
+  
   var segmment = {
     type: args.type || 'stop',
     points: [{
       lat: payload.lat, 
       lng: payload.lng, 
+      events: events,
       at: args.at
     }],
     start: last? last.at: args.at,
@@ -135,12 +156,14 @@ Schema.statics.modify = function(args, fn) {
     });
     return;
   }
-  
+
+  var events = this._parseEvents(payload.events);
   var Segmment = db.model('Segmment')
     , last = segmment.points[0]
     , point = {
         lat: payload.lat
       , lng: payload.lng
+      , events: events
       , at: new(Date)(args.at)
     };
   
