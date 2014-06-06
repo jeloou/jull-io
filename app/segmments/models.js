@@ -137,7 +137,7 @@ Schema.statics.modify = function(args, fn) {
   }
   
   var Segmment = db.model('Segmment')
-    , last = segmment.point[0]
+    , last = segmment.points[0]
     , point = {
         lat: payload.lat
       , lng: payload.lng
@@ -178,7 +178,7 @@ Schema.statics.last = function(args, fn) {
       that
         .find({thing: thing._id}, {points: {$slice: -1}})
 	.sort('-end')
-	.select('_id type')
+	.select('_id type distance duration')
 	.limit(1)
 	.exec(function(err, segmments) {
 	  var segmment, payload;
