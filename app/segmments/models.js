@@ -201,7 +201,7 @@ Schema.statics.last = function(args, fn) {
       that
         .find({thing: thing._id}, {points: {$slice: -1}})
 	.sort('-end')
-	.select('_id type distance duration')
+	.select('_id type start distance duration')
 	.limit(1)
 	.exec(function(err, segmments) {
 	  var segmment, payload;
@@ -213,6 +213,11 @@ Schema.statics.last = function(args, fn) {
 	  
 	  segmment = segmments.pop();
 	  if (!segmment) {
+	    fn(null, null);
+	    return;
+	  }
+	  
+	  if (!moment(args.at).isSame(segmment.start, 'day')) {
 	    fn(null, null);
 	    return;
 	  }
