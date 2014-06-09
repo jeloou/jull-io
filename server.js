@@ -17,6 +17,7 @@ routes = [
   './app/web/routes',
   './app/users/routes',
   './app/things/routes',
+  './app/fences/routes'
 ];
 
 routes.forEach(function(path) {
