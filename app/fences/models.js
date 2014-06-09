@@ -6,7 +6,7 @@ var Schema = new(db.Schema)({
   name: {type: String, trim: true, required: true},
   description: {type: String, trim: true, required: true},
   user: {type: ObjectId, ref: 'User', required: true},
-  things: [{type: String}],
+  things: [{type: String, required: false, default: []}],
   boundaries: {
     type: {type: String, default: 'Polygon'},
     coordinates: []
@@ -26,6 +26,24 @@ Schema.methods.toJSON = function() {
     things: this.things,
     boundaries: this.boundaries.coordinates.pop()
   };
+};
+
+Schema.statics.containing = function(point, fn) {
+  this
+    .where('boundaries')
+    .intersects()
+    .geometry({
+      type: 'Point',
+      coordinates: [point.lat, point.lng]
+    })
+    .exec(function(err, fences) {
+      if (err) {
+	fn(err);
+	return;
+      }
+
+      fn(null, fences);
+    });
 };
 
 Schema.statics.add = function(args, fn) {
@@ -151,7 +169,6 @@ Schema.statics.modify = function(args, fn) {
 	fence[e[0]] = e[1];
       });
       
-      console.log('fence: ', fence);
       fence.save(function(err) {
 	if (err) {
 	  fn({
@@ -219,7 +236,12 @@ Schema.path('name').validate(function(name, fn) {
 
 Schema.path('things').validate(function(things, fn) {
   var User = db.model('User');
-  console.log(this.user);
+  
+  if (things.length < 1) {
+    fn(true);
+    return;
+  }
+  
   User
     .findOne({
       _id: this.user,
@@ -227,7 +249,6 @@ Schema.path('things').validate(function(things, fn) {
     })
     .select('_id')
     .exec(function(err, user) {
-      console.log('user: ', user);
       if (err) {
 	fn(false);
 	return;
@@ -238,7 +259,6 @@ Schema.path('things').validate(function(things, fn) {
 }, 'One or more things are invalid');
 
 Schema.path('boundaries.coordinates').validate(function(coordinates) {
-  console.log('this.isModified(\'name\'): ', this.isModified('name'));
   if (!(coordinates.length > 0)) {
     return false;
   }
