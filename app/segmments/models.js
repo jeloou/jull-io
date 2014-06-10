@@ -91,7 +91,11 @@ Schema.statics.add = function(args, fn) {
   user = args.user;
   
   var last = args.last || null
-    , events = this._parseEvents(payload.events);
+    , events = [];
+
+  if (typeof payload.events !== 'undefined') {
+    events = this._parseEvents(payload.events);
+  }
   
   var segmment = {
     type: args.type || 'stop',
@@ -157,7 +161,11 @@ Schema.statics.modify = function(args, fn) {
     return;
   }
 
-  var events = this._parseEvents(payload.events);
+  var events = [];
+  if (typeof payload.events !== 'undefined') {
+    events = this._parseEvents(payload.events);
+  }
+  
   var Segmment = db.model('Segmment')
     , last = segmment.points[0]
     , point = {
