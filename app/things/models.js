@@ -1,7 +1,8 @@
 var db = require('mongoose')
   , uuid = require('node-uuid')
   , _ = require('underscore')._
-  , isKey = require('../../lib/utils').isKey;
+  , isKey = require('../../lib/utils').isKey
+  , handleError = require('../../lib/utils').handleError;
 
 var ObjectId = db.Schema.ObjectId;
 var Schema = new(db.Schema)({
@@ -21,10 +22,7 @@ Schema.statics.add = function(args, fn) {
   thing = new(this)(payload);
   thing.save(function(err) {
     if (err) {
-      fn({
-	message: 'Something went wrong',
-	code: 500
-      });
+      handleError(err, fn);
       return;
     }
     
@@ -49,10 +47,7 @@ Schema.statics.get = function(args, fn) {
   this.findOne(
     {user: user, 'key.key': key}, function(err, thing) {
       if (err) {
-	fn({
-	  message: 'Something went wrong',
-	  code: 500
-	});
+	handleError(err, fn);
 	return;
       }
       
@@ -76,10 +71,7 @@ Schema.statics.fetch = function(args, fn) {
   
   this.find({user: user}, function(err, things) {
     if (err) {
-      fn({
-	message: 'Something went wrong',
-	code: 500
-      });
+      handleError(err, fn);
       return;
     }
     
@@ -109,10 +101,7 @@ Schema.statics.modify = function(args, fn) {
       ];
       
       if (err) {
-	fn({
-	  message: 'something went wrong',
-	  code: 500
-	});
+	handleError(err, fn);
 	return;
       }
       
@@ -143,10 +132,7 @@ Schema.statics.modify = function(args, fn) {
       
       thing.save(function(err) {
 	if (err) {
-	  fn({
-	    message: 'something went wrong',
-	    code: 500
-	  });
+	  handleError(err, fn);
 	  return;
 	}
 	fn(null, thing);
@@ -171,10 +157,7 @@ Schema.statics.remove = function(args, fn) {
   this.findOne(
     {user: user, 'key.key': key}, function(err, thing) {
       if (err) {
-	fn({
-	  message: 'something went wrong',
-	  code: 500
-	});
+	handleError(err, fn);
 	return;
       }
       
@@ -188,10 +171,7 @@ Schema.statics.remove = function(args, fn) {
       
       thing.remove(function(err) {
 	if (err) {
-	  fn({
-	    message: 'something went wrong',
-	    code: 500
-	  });
+	  handleError(err, fn);
 	  return;
 	}
 	

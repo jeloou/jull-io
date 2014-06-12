@@ -1,7 +1,7 @@
-
 var db = require('mongoose')
   , crypto = require('crypto')
-  , _ = require('underscore')._;
+  , _ = require('underscore')._
+  , handleError = require('../../lib/utils').handleError;
 
 var Schema = new(db.Schema)({
   first_name: {type: String, trim: true},
@@ -29,11 +29,7 @@ Schema.statics.add = function(data, fn) {
   user = new(this)(data);
   user.save(function(err) {
     if (err) {
-      fn.call({}, {
-	message: 'Bad input parameters',
-	errors: err,
-	code: 400
-      });
+      handleError(err, fn);
       return;
     }
     
@@ -49,10 +45,7 @@ Schema.statics.owns = function(user, keys, fn) {
   this.findOne(
     {_id: user, things: {$all: keys}}, function(err, user) {
       if (err) {
-	fn({
-	  message: 'something went wrong',
-	  code: 500
-	});
+	handleError(err, fn);
 	return;
       }
       

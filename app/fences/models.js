@@ -1,5 +1,6 @@
 var db = require('mongoose')
-  , _ = require('underscore')._;
+  , _ = require('underscore')._
+  , handleError = require('../../lib/utils').handleError;
 
 var ObjectId = db.Schema.ObjectId;
 var Schema = new(db.Schema)({
@@ -63,10 +64,7 @@ Schema.statics.add = function(args, fn) {
   fence.save(function(err) {
     console.log(err);
     if (err) {
-      fn({
-	message: 'Something went wrong',
-	code: 500
-      });
+      handleError(err, fn);
       return;
     }
 
@@ -83,10 +81,7 @@ Schema.statics.get = function(args, fn) {
   this.findOne(
     {_id: id, user: user}, function(err, fence) {
       if (err) {
-	fn({
-	  message: 'Something went wrong',
-	  code: 500
-	});
+	handleError(err, fn);
 	return;
       }
       
@@ -110,10 +105,7 @@ Schema.statics.fetch = function(args, fn) {
   
   this.find({user: user}).exec(function(err, fences) {
     if (err) {
-      fn({
-	message: 'Something went wrong',
-	code: 500
-      });
+      handleError(err, fn);
       return;
     }
 
@@ -135,10 +127,7 @@ Schema.statics.modify = function(args, fn) {
       ];
       
       if (err) {
-	fn({
-	  message: 'something went wrong',
-	  code: 500
-	});
+	handleError(err, fn);
 	return;
       }
       
@@ -171,10 +160,7 @@ Schema.statics.modify = function(args, fn) {
       
       fence.save(function(err) {
 	if (err) {
-	  fn({
-	    message: 'something went wrong',
-	    code: 500
-	  });
+	  handleError(err, fn);
 	  return;
 	}
 	fn(null, fence);
@@ -192,10 +178,7 @@ Schema.statics.remove = function(args, fn) {
   this.findOne(
     {_id: id, user: user}, function(err, fence) {
       if (err) {
-	fn({
-	  message: 'something went wrong',
-	  code: 500
-	});
+	handleError(err, fn);
 	return;
       }
       
@@ -209,10 +192,7 @@ Schema.statics.remove = function(args, fn) {
       
       fence.remove(function(err) {
 	if (err) {
-	  fn({
-	    message: 'something went wrong',
-	    code: 500
-	  });
+	  handleError(err, fn);
 	  return;
 	}
 	
