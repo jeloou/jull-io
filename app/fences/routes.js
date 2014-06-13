@@ -14,7 +14,7 @@ module.exports = (function(app) {
     Fence.add(
       args, function(err, fence) {
 	if (err) {
-	  res.send(err.code, err.message);
+	  res.json(err.code, err);
 	  return;
 	}
 	
@@ -97,7 +97,7 @@ module.exports = (function(app) {
     Fence.remove(
       args, function(err) {
 	if (err) {
-	  res.json(err.code, err.message);
+	  res.json(err.code, err);
 	  return;
 	}
 

@@ -14,7 +14,7 @@ module.exports = (function(app) {
     Thing.add(
       args, function(err, thing) {
 	if (err) {
-	  res.send(err.code, err.message);
+	  res.json(err.code, err);
 	  return;
 	}
 
@@ -34,7 +34,7 @@ module.exports = (function(app) {
     Thing.get(
       args, function(err, thing) {
 	if (err) {
-	  res.send(err.code, err.message);
+	  res.json(err.code, err);
 	  return;
 	}
 	
@@ -53,7 +53,7 @@ module.exports = (function(app) {
     Thing.fetch(
       args, function(err, things) {
 	if (err) {
-	  res.send(err.code, err.message);
+	  res.json(err.code, err);
 	  return;
 	}
 	
@@ -73,7 +73,7 @@ module.exports = (function(app) {
     Thing.modify(
       args, function(err, thing) {
 	if (err) {
-	  res.send(err.code, err.message);
+	  res.json(err.code, err);
 	  return;
 	}
 
@@ -93,11 +93,11 @@ module.exports = (function(app) {
     Thing.remove(
       args, function(err) {
 	if (err) {
-	  res.send(err.code, err.message);
+	  res.json(err.code, err);
 	  return;
 	}
 
-	res.send(200);
+	res.status(200).json();
       });
   });
 });
