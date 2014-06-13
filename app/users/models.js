@@ -41,17 +41,21 @@ Schema.statics.owns = function(user, keys, fn) {
   if (_.isString(keys)) {
     keys = [keys];
   }
-  
-  this.findOne(
-    {_id: user, things: {$all: keys}}, function(err, user) {
+
+  User
+    .findOne({
+      _id: user,
+      things: {$all: keys}
+    })
+    .select('_id')
+    .exec(function(err, user) {
       if (err) {
-	handleError(err, fn);
+	fn(err);
 	return;
       }
       
       fn(null, user !== null);
-    }
-  );
+    });
 };
 
 Schema.methods.authenticate = function(password) {

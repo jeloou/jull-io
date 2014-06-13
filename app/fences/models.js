@@ -222,20 +222,14 @@ Schema.path('things').validate(function(things, fn) {
     return;
   }
   
-  User
-    .findOne({
-      _id: this.user,
-      things: {$all: things}
-    })
-    .select('_id')
-    .exec(function(err, user) {
-      if (err) {
-	fn(false);
-	return;
-      }
-      
-      fn(user !== null);
-    });
+  User.owns(this.user, things, function(err, owns) {
+    if (err) {
+      fn(false);
+      return;
+    }
+    
+    fn(owns);
+  });
 }, 'One or more things are invalid');
 
 Schema.path('boundaries.coordinates').validate(function(coordinates) {
