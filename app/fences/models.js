@@ -1,6 +1,7 @@
 var db = require('mongoose')
   , _ = require('underscore')._
-  , handleError = require('../../lib/utils').handleError;
+  , handleError = require('../../lib/utils').handleError
+  , async = require('async');
 
 var ObjectId = db.Schema.ObjectId;
 var Schema = new(db.Schema)({
@@ -11,7 +12,8 @@ var Schema = new(db.Schema)({
   boundaries: {
     type: {type: String, default: 'Polygon'},
     coordinates: []
-  }
+  },
+  contains: [{type: ObjectId, ref: 'Thing', default: []}]
 });
 
 Schema.index({
@@ -29,7 +31,9 @@ Schema.methods.toJSON = function() {
   };
 };
 
-Schema.statics.containing = function(point, fn) {
+Schema.statics.containing = function(thing, point, fn) {
+  var that = this;
+  
   this
     .where('boundaries')
     .intersects()
@@ -37,13 +41,94 @@ Schema.statics.containing = function(point, fn) {
       type: 'Point',
       coordinates: [point.lat, point.lng]
     })
-    .exec(function(err, fences) {
+    .select('_id')
+    .exec(function(err, currentFences) {
       if (err) {
 	fn(err);
 	return;
       }
-
-      fn(null, fences);
+      
+      that
+	.where('contains')
+	.all([thing.id])
+	.select('_id')
+	.exec(function(err, fences) {
+	  if (err) {
+	    fn(err);
+	    return;
+	  }
+	  
+	  currentFences = currentFences.map(function(obj) {
+	    return ''+obj._id;
+	  });
+	  
+	  fences = fences.map(function(obj) {
+	    return ''+obj._id;
+	  });
+	  
+	  async.parallel([
+	    function(fn) {
+	      var newFences = _.difference(currentFences, fences);
+	      if (_.isEmpty(newFences)) {
+		fn(null, false);
+		return;
+	      }
+	      
+	      that.collection.update(
+		{_id: {
+		  $in: newFences.map(function(id) { 
+		    return db.Types.ObjectId(id);
+		  })
+		}},
+		{$push: {
+		  contains: db.Types.ObjectId(thing.id)
+		}},
+		function(err) {
+		  if (err) {
+		    fn(err);
+		    return;
+		  }
+		  
+		  fn(null, true);
+		}
+	      );
+	    },
+	    function(fn) {
+	      var leavedFences = _.difference(fences, currentFences);
+	      if (_.isEmpty(leavedFences)) {
+		fn(null, false);
+		return;
+	      }
+	      
+	      that.collection.update(
+		{_id: {
+		  $in: leavedFences.map(function(id) { 
+		    return db.Types.ObjectId(id);
+		  })
+		}},
+		{$pull: {
+		  contains: db.Types.ObjectId(thing.id)
+		}},
+		function(err) {
+		  if (err) {
+		    fn(err);
+		    return;
+		  }
+		  
+		  fn(null, true);
+		}
+	      );
+	    }
+	  ],
+          function(err, res) {
+	    if (err) {
+	      fn(err);
+	      return;
+	    }
+	    
+	    fn(null, true);
+	  });
+	});
     });
 };
 
@@ -62,7 +147,6 @@ Schema.statics.add = function(args, fn) {
   
   fence = new(this)(data);
   fence.save(function(err) {
-    console.log(err);
     if (err) {
       handleError(err, fn);
       return;
