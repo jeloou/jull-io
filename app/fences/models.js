@@ -66,11 +66,11 @@ Schema.statics.containing = function(thing, point, fn) {
 	    return ''+obj._id;
 	  });
 	  
-	  async.parallel([
-	    function(fn) {
+	  async.parallel({
+	    new: function(fn) {
 	      var newFences = _.difference(currentFences, fences);
 	      if (_.isEmpty(newFences)) {
-		fn(null, false);
+		fn(null, null);
 		return;
 	      }
 	      
@@ -89,14 +89,16 @@ Schema.statics.containing = function(thing, point, fn) {
 		    return;
 		  }
 		  
-		  fn(null, true);
+		  fn(null, newFences.map(function(id) { 
+		    return db.Types.ObjectId(id);
+		  }));
 		}
 	      );
 	    },
-	    function(fn) {
+	    leaved: function(fn) {
 	      var leavedFences = _.difference(fences, currentFences);
 	      if (_.isEmpty(leavedFences)) {
-		fn(null, false);
+		fn(null, null);
 		return;
 	      }
 	      
@@ -115,18 +117,21 @@ Schema.statics.containing = function(thing, point, fn) {
 		    return;
 		  }
 		  
-		  fn(null, true);
+		  fn(null, leavedFences.map(function(id) {
+		    return db.Types.ObjectId(id);
+		  }));
 		}
 	      );
 	    }
-	  ],
+	  },
           function(err, res) {
+	    console.log(res);
 	    if (err) {
 	      fn(err);
 	      return;
 	    }
 	    
-	    fn(null, true);
+	    fn(null, res.new, res.leaved);
 	  });
 	});
     });

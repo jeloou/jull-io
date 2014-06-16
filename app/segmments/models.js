@@ -182,15 +182,16 @@ Schema.statics.modify = function(args, fn) {
   duration += durationBetween(last.at, point.at);
   
   Segmment.collection.update(
-      {_id: segmment._id}
-    , {
-        $push: {points: point}
-      , $set: {
-	  distance: distance
-	, duration: duration
-      }
-    }
-    , function(err) {
+    {_id: segmment._id},
+    {$push: {
+      points: point
+    },
+     $set: {
+       distance: distance, 
+       duration: duration
+     }
+    },
+    function(err) {
       if (err) {
 	fn(err);
 	return;
