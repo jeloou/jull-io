@@ -1,5 +1,6 @@
 var express = require('express')
   , db = require('mongoose')
+  , ascoltatori = require('ascoltatori')
   , mongoStore = require('connect-mongo')(express)
   , LocalStrategy = require('passport-local').Strategy
   , SessionSockets = require('session.socket.io')
@@ -19,7 +20,7 @@ sessionStore = new(mongoStore)({
   collection : 'sessions'
 });
 
-module.exports = function(app, io, passport) {
+module.exports = exports = function(app, io, passport) {
   var User, connect, app_path;
 
   connect = function() {
@@ -144,4 +145,8 @@ module.exports = function(app, io, passport) {
   
   socket(io, settings);
   store(settings);
+
+  ascoltatori.build(settings, function(ascoltatore) {
+    exports.ascoltatore = ascoltatore;
+  });
 };
