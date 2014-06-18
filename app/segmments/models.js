@@ -1,5 +1,7 @@
 var db = require('mongoose')
-  , moment = require('moment');
+  , moment = require('moment')
+  , handleError = require('../../lib/utils').handleError
+  , Fence = db.model('Fence');
 
 const R = 6378137
     , DEG_TO_RAD = Math.PI/180;
@@ -97,14 +99,18 @@ Schema.statics.add = function(args, fn) {
     events = this._parseEvents(payload.events);
   }
   
+  var point = {
+    lat: payload.lat,
+    lng: payload.lng, 
+    events: events,
+    at: args.at
+  };
+
   var segmment = {
     type: args.type || 'stop',
-    points: [{
-      lat: payload.lat, 
-      lng: payload.lng, 
-      events: events,
-      at: args.at
-    }],
+    points: [
+      point
+    ],
     start: last? last.at: args.at,
     end: args.at,
     updated: args.at
@@ -118,10 +124,7 @@ Schema.statics.add = function(args, fn) {
   Thing.findOne(
     {'key.key': thing}).select('_id').exec(function(err, thing) {
       if (err) {
-	fn({
-	  message: 'something went wrong',
-	  code: 500
-	});
+	handleError(err, fn);
 	return;
       }
       
@@ -129,10 +132,7 @@ Schema.statics.add = function(args, fn) {
       segmment = new(that)(segmment);
       segmment.save(function(err) {
 	if (err) {
-	  fn({
-	    message: 'something went wrong',
-	    code : 500
-	  });
+	  handleError(err, fn);
 	  return;
 	}
 	
@@ -152,7 +152,7 @@ Schema.statics.modify = function(args, fn) {
     segmment.points[0].at = args.at;
     segmment.save(function(err) {
       if (err) {
-	fn(err);
+	handleError(err, fn);
 	return;
       }
       

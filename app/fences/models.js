@@ -125,7 +125,6 @@ Schema.statics.containing = function(thing, point, fn) {
 	    }
 	  },
           function(err, res) {
-	    console.log(res);
 	    if (err) {
 	      fn(err);
 	      return;
