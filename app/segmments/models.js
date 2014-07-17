@@ -136,16 +136,24 @@ Schema.statics.add = function(args, fn) {
 	  return;
 	}
 	
-	fn(null, segmment);
+	Fence.containing(thing, point, function(err) {
+	  if (err) {
+	    fn(err);
+	    return;
+	  }
+	  
+	  fn(null);
+	});
       });
     });
 };
 
 Schema.statics.modify = function(args, fn) {
-  var segmment, payload, user;
+  var segmment, payload, thing, user;
 
   segmment = args.segmment;
   payload = args.payload;
+  thing = args.thing;
   user = args.user;
   
   if (segmment.type == 'stop') {
@@ -197,7 +205,14 @@ Schema.statics.modify = function(args, fn) {
 	return;
       }
       
-      fn(null);
+      Fence.containing(thing, point, function(err) {
+	if (err) {
+	  fn(err);
+	  return;
+	}
+	
+	fn(null);
+      });
     });
 };
 

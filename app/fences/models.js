@@ -32,7 +32,13 @@ Schema.methods.toJSON = function() {
 };
 
 Schema.statics.containing = function(thing, point, fn) {
-  var that = this;
+  var thing_id, that = this;
+  
+  if (_.isString(thing)) {
+    thing_id = db.Types.ObjectId(thing);
+  } else { 
+    thing_id = thing._id;
+  }
   
   this
     .where('boundaries')
@@ -50,7 +56,7 @@ Schema.statics.containing = function(thing, point, fn) {
       
       that
 	.where('contains')
-	.all([thing.id])
+	.all([thing_id])
 	.select('_id')
 	.exec(function(err, fences) {
 	  if (err) {
@@ -73,7 +79,7 @@ Schema.statics.containing = function(thing, point, fn) {
 		fn(null, null);
 		return;
 	      }
-	      
+
 	      that.collection.update(
 		{_id: {
 		  $in: newFences.map(function(id) { 
@@ -81,7 +87,7 @@ Schema.statics.containing = function(thing, point, fn) {
 		  })
 		}},
 		{$push: {
-		  contains: db.Types.ObjectId(thing.id)
+		  contains: thing_id
 		}},
 		function(err) {
 		  if (err) {
@@ -103,13 +109,13 @@ Schema.statics.containing = function(thing, point, fn) {
 	      }
 	      
 	      that.collection.update(
-		{_id: {
+		 {_id: {
 		  $in: leavedFences.map(function(id) { 
 		    return db.Types.ObjectId(id);
 		  })
 		}},
 		{$pull: {
-		  contains: db.Types.ObjectId(thing.id)
+		  contains: thing_id
 		}},
 		function(err) {
 		  if (err) {
