@@ -15,7 +15,7 @@ duration and distance statistics.
 jull.io uses MongoDB >= 2.4.10 for all the geo-related operations, storing data and
 sessions. Redis >= 2.6.16 for the job queue. In order to connect jull.io to [mosca](https://github.com/mcollina/mosca) you will need to run it using [mqtt-cli](https://github.com/jeloou/mqtt-cli).
  
-## Getting started 
+### Getting started 
 
 Run locally: 
     
