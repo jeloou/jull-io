@@ -1,41 +1,33 @@
 extend landing-layout
 
 block content
-  // http://www.littleco.com/
-  div(style='height: 100%;  width: 100%; z-index: -1; background-color: #333; position: absolute;')
+  div(style='height: 100%;  width: 100%; z-index: -1; background-color: #222; position: absolute;')
   .map-wrapper
     .map-wrapper-inner
       .map-container
         .header.clearfix
           .inner
-            h3.header-brand Cover
             ul.nav.header-nav
-              li.active
-                a(ref='#') Home
+              li	
+                a.icon-github-01(href='https://github.com/jeloou/jull-io' target='_blank')
               li
-                a(ref='#') Features
-              li
-                a(ref='#') Contact
+                a.icon-twitter-3(href='https://twitter.com/jull_io' target='_blank')
         //
         .inner.cover
-          h1.cover-heading Cover your page.
-          p.lead
-            | Cover is a one-page template for building simple and beautiful home pages.
-            | Download, edit the text, and add your own fullscreen background photo to 
-            | make it your own.
+          img.featurette-image.img-responsive#logo(style='margin: auto;' src='/img/astro-guy.png')
+          h1.cover-heading(style='margin-bottom: 6%')
+            | m2m instant messaging for 
+            br
+            | moving things
           p.lead
             a.btn.btn-lg.btn-default(href='#') Learn more
         //
-        .footer
-          .inner
-            p  
-              | Cover template for 
-              a(href='http://getbootstrap.com') Bootstrap, 
-              | by 
-              a(href='http://twitter.com/mdo') @mdo
-              | .
   //
   .container.markerting(style='margin-bottom: 80px;')
+    .row.featurette(style='margin: auto; max-width: 800px; margin-top: -11%;')
+      img.featurette-image.img-responsive(src='/img/browser.png')
+    hr.featurette-divider
+    //
     .row.featurette
       .col-md-7
         h2.featurette-heading First featurette heading. 
@@ -72,28 +64,18 @@ block content
         img.featurette-image.img-responsive(alt='500x500' src='holder.js/500x500/auto')
   //
   .clearfix
-  div(style='height: 100%; width: 100%; z-index: -1; background-color: #333; position: absolute;')
-  .container(style='height: 100%;')
-    .row
-      p Hello
-  //
-  .container(style='margin: 0 auto; width: 80%;')
-    .row
-      .col-lg-6
-        .input-group(style='margin: -17px auto; width: 40%;')
-          input.form-control(type='email' placeholder='Your email address')
-          span.input-group-btn
-            button.btn.btn-default(type='button') Yes, please!
-    .row(style='padding-top: 150px; padding-bottom: 150px;')
-      .col-lg-6
-        h3(style='line-height:1.3em; width: 70%; margin: 0 auto;')
-          | We'd love to hear from you! If you want to say hello, write us through
-          a.icon-mailru(href='#' target='_blank', style='diplay:inline-block; width: 23px; margin-left:8px; color: orange; text-decoration: none;')
-          |. If brevity is your thing, we're on
-          a.icon-twitter-3(href='#' target='_blank', style='diplay:inline-block; width: 23px; margin-left:8px; color: #00ACED; text-decoration: none;')
-          |.
-          | Sometimes, we build something fun and share it on 
-          a.icon-tumblr(href='#' target='_blank', style='diplay:inline-block; width: 23px; margin-left:-2px; color: #2C4762; text-decoration: none;')
-          |.
+  div(style='height: 100%; width: 100%; z-index: -1; background-color: #222; position: absolute;')
+  .container(style='height: 60%;')
+    .map-wrapper
+      .map-wrapper-inner
+        .map-container
+          .inner.cover
+            h1.cover-heading It's free and open-source
+            p.lead
+              | jull.io is still being developed, but you can go and play with
+              | the existing functionality
+            p.lead
+              a.icon-github-01(style='font-size: 30px;' href='https://github.com/jeloou/jull-io' target='_blank')
+
 
   

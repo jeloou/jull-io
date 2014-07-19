@@ -12,15 +12,13 @@ a, a:focus, a:hover {
 }
 
 html, body {
-    /*background-color: #333333;*/
     height: 100%;
 }
+
 body {
-    box-shadow: 0 0 100px rgba(0, 0, 0, 0.5) inset;
-    /*color: #FFFFFF;*/
     text-align: center;
-    /*text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);*/
 }
+
 .map-wrapper {
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
     color: #FFFFFF;
@@ -53,28 +51,29 @@ body {
     margin-left: 20px;
 }
 .header-nav > li > a {
-    border-bottom: 2px solid rgba(0, 0, 0, 0);
-    color: rgba(255, 255, 255, 0.75);
-    font-size: 16px;
+    diplay:inline-block; 
     font-weight: bold;
     padding-left: 0;
     padding-right: 0;
+    width: 23px; 
+    margin-left:8px; 
+    color: #fff; 
+    text-decoration: none; 
+    font-size: 30px;
 }
 
-.header-nav > li > a:hover, 
+.header-nav > li > a:hover,
 .header-nav > li > a:focus {
-    background-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(255, 255, 255, 0.25);
+    background-color: inherit;
+    color: #fff;
 }
 
-.header-nav > .active > a, 
-.header-nav > .active > a:hover, 
-.header-nav > .active > a:focus {
-    border-bottom-color: #FFFFFF;
-    color: #FFFFFF;
-}
 
 @media (min-width: 768px) {
+  #logo {
+    max-height: 300px;
+  }
+
   .header-brand {
     float: left;
   }
