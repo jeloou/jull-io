@@ -50,7 +50,8 @@ body {
 .header-nav > li + li {
     margin-left: 20px;
 }
-.header-nav > li > a {
+.header-nav > li > a,
+#footer a {
     diplay:inline-block; 
     font-weight: bold;
     padding-left: 0;
@@ -68,6 +69,54 @@ body {
     color: #fff;
 }
 
+#header .cover-heading {
+  margin-bottom: 6%;
+}
+
+#logo {
+  max-height: 300px;
+  margin: auto;
+}
+
+#capture-1 {
+  margin: auto; 
+  max-width: 800px; 
+  margin-top: -11%;
+}
+
+#footer-background,
+#header-background {
+    position: absolute;
+    background-color: #222; 
+    height: 100%; 
+    width: 100%; 
+    z-index: -1; 
+}
+
+#footer {
+  height: 70%;
+}
+
+@media (max-width : 480px) {
+  #logo {    
+    max-height: 250px;
+    background-color: blue;
+  }
+
+  #capture-1 {
+    margin-top: -14%;
+  }
+}
+
+@media (max-height: 768px) {
+   #logo {
+     height: 215px;
+   }
+   
+   #capture-1 {
+     margin-top: -8%;
+   }
+}
 
 @media (min-width: 768px) {
   #logo {
@@ -96,23 +145,27 @@ body {
 }
 
 @media (min-width: 768px) {
-.header {
+  .header {
     position: absolute;
     top: 0;
-}
-.map-container .footer {
+  }
+
+  .map-container .footer {
     bottom: 0;
     position: absolute;
-}
-.map-wrapper-inner {
+  }
+  
+  .map-wrapper-inner {
     vertical-align: middle;
-}
-.header, 
-.map-container.footer, 
-.map-container {
+  }
+
+  .header, 
+  .map-container.footer, 
+  .map-container {
     width: 100%;
+  }
 }
-}
+
 @media (min-width: 992px) {
   .header, 
   .map-container .footer, 
@@ -126,6 +179,7 @@ body {
     padding-right: 15px;
     margin-bottom: 80px;
 }
+
 .marketing .col-lg-4 {
     margin-bottom: 20px;
     text-align: center;
@@ -137,14 +191,17 @@ body {
     margin-left: 10px;
     margin-right: 10px;
 }
+
 .featurette-divider {
     margin: 80px 0;
 }
+
 .featurette-heading {
     font-weight: 300;
     letter-spacing: -1px;
     line-height: 1;
 }
+
 @media (min-width: 768px) {
   .marketing {
     padding-left: 0;
@@ -161,3 +218,4 @@ body {
     margin-top: 120px;
   }
 }
+

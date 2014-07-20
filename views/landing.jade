@@ -1,8 +1,8 @@
 extend landing-layout
 
 block content
-  div(style='height: 100%;  width: 100%; z-index: -1; background-color: #222; position: absolute;')
-  .map-wrapper
+  div#header-background
+  #header.map-wrapper
     .map-wrapper-inner
       .map-container
         .header.clearfix
@@ -14,8 +14,8 @@ block content
                 a.icon-twitter-3(href='https://twitter.com/jull_io' target='_blank')
         //
         .inner.cover
-          img.featurette-image.img-responsive#logo(style='margin: auto;' src='/img/astro-guy.png')
-          h1.cover-heading(style='margin-bottom: 6%')
+          img.featurette-image.img-responsive#logo(src='/img/astro-guy.png')
+          h1.cover-heading
             | m2m instant messaging for 
             br
             | moving things
@@ -23,8 +23,8 @@ block content
             a.btn.btn-lg.btn-default(href='#') Learn more
         //
   //
-  .container.markerting(style='margin-bottom: 80px;')
-    .row.featurette(style='margin: auto; max-width: 800px; margin-top: -11%;')
+  .container.markerting
+    .row.featurette#capture-1
       img.featurette-image.img-responsive(src='/img/browser.png')
     hr.featurette-divider
     //
@@ -64,8 +64,8 @@ block content
         img.featurette-image.img-responsive(alt='500x500' src='holder.js/500x500/auto')
   //
   .clearfix
-  div(style='height: 100%; width: 100%; z-index: -1; background-color: #222; position: absolute;')
-  .container(style='height: 60%;')
+  div#footer-background
+  #footer.container
     .map-wrapper
       .map-wrapper-inner
         .map-container
@@ -75,7 +75,7 @@ block content
               | jull.io is still being developed, but you can go and play with
               | the existing functionality
             p.lead
-              a.icon-github-01(style='font-size: 30px;' href='https://github.com/jeloou/jull-io' target='_blank')
+              a.icon-github-01(href='https://github.com/jeloou/jull-io' target='_blank')
 
 
   
