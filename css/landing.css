@@ -1,0 +1,221 @@
+a, a:focus, a:hover {
+    color: #FFFFFF;
+}
+
+.map-wrapper .btn-default, 
+.map-wrapper .btn-default:hover, 
+.map-wrapper .btn-default:focus {
+    background-color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+    color: #333333;
+    text-shadow: none;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    text-align: center;
+}
+
+.map-wrapper {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    color: #FFFFFF;
+    display: table;
+    height: 100%;
+    min-height: 100%;
+    width: 100%;
+    margin-bottom: 40px;
+}
+.map-wrapper-inner {
+    display: table-cell;
+    vertical-align: top;
+}
+
+.map-container {
+    margin-left: auto;
+    margin-right: auto;
+}
+.inner {
+    padding: 30px;
+}
+.header-brand {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.header-nav > li {
+    display: inline-block;
+}
+.header-nav > li + li {
+    margin-left: 20px;
+}
+.header-nav > li > a,
+#footer a {
+    diplay:inline-block; 
+    font-weight: bold;
+    padding-left: 0;
+    padding-right: 0;
+    width: 23px; 
+    margin-left:8px; 
+    color: #fff; 
+    text-decoration: none; 
+    font-size: 30px;
+}
+
+.header-nav > li > a:hover,
+.header-nav > li > a:focus {
+    background-color: inherit;
+    color: #fff;
+}
+
+#header .cover-heading {
+  margin-bottom: 6%;
+}
+
+#logo {
+  max-height: 300px;
+  margin: auto;
+}
+
+#capture-1 {
+  margin: auto; 
+  max-width: 800px; 
+  margin-top: -11%;
+}
+
+#footer-background,
+#header-background {
+    position: absolute;
+    background-color: #222; 
+    height: 100%; 
+    width: 100%; 
+    z-index: -1; 
+}
+
+#footer {
+  height: 70%;
+}
+
+@media (max-width : 480px) {
+  #logo {    
+    max-height: 250px;
+    background-color: blue;
+  }
+
+  #capture-1 {
+    margin-top: -14%;
+  }
+}
+
+@media (max-height: 768px) {
+   #logo {
+     height: 215px;
+   }
+   
+   #capture-1 {
+     margin-top: -8%;
+   }
+}
+
+@media (min-width: 768px) {
+  #logo {
+    max-height: 300px;
+  }
+
+  .header-brand {
+    float: left;
+  }
+  
+  .header-nav {
+    float: right;
+  }
+}
+
+.cover {
+    padding: 0 20px;
+}
+.cover .btn-lg {
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+.map-container .footer {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+@media (min-width: 768px) {
+  .header {
+    position: absolute;
+    top: 0;
+  }
+
+  .map-container .footer {
+    bottom: 0;
+    position: absolute;
+  }
+  
+  .map-wrapper-inner {
+    vertical-align: middle;
+  }
+
+  .header, 
+  .map-container.footer, 
+  .map-container {
+    width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .header, 
+  .map-container .footer, 
+  .map-container {
+    width: 700px;
+  }
+}
+
+.marketing {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 80px;
+}
+
+.marketing .col-lg-4 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+.marketing h2 {
+    font-weight: normal;
+}
+.marketing .col-lg-4 p {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.featurette-divider {
+    margin: 80px 0;
+}
+
+.featurette-heading {
+    font-weight: 300;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+@media (min-width: 768px) {
+  .marketing {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .featurette-heading {
+     font-size: 50px;
+  }
+}
+
+@media (min-width: 992px) {
+  .featurette-heading {
+    margin-top: 120px;
+  }
+}
+
