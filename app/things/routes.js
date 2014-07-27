@@ -44,7 +44,7 @@ module.exports = (function(app) {
   
   app.get('/things', auth.requiresLogin, function(req, res) {
     var args;
-
+    
     args = {
       user: req.user._id,
       query: req.query
@@ -57,7 +57,9 @@ module.exports = (function(app) {
 	  return;
 	}
 	
-	res.json(things);
+	res.json(things.map(function(thing) {
+	  return thing.toJSON();
+	}));
       });
   });
 

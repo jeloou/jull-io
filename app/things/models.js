@@ -12,6 +12,18 @@ var Schema = new(db.Schema)({
   key: db.Schema.Types.Mixed,
 });
 
+Schema.methods.toJSON = function() {
+  return {
+    id: this._id,
+    name: this.name,
+    description: this.description,
+    user: this.user.toJSON(),
+    key: {
+      key: this.key.key,
+      token: this.key.token
+    }
+  };
+};
 
 Schema.statics.add = function(args, fn) {
   var payload, thing;
@@ -69,14 +81,17 @@ Schema.statics.fetch = function(args, fn) {
   query = args.query;
   user = args.user;
   
-  this.find({user: user}, function(err, things) {
-    if (err) {
-      handleError(err, fn);
-      return;
-    }
-    
-    fn(null, things);
-  });
+  this
+    .find({user: user})
+    .populate('user')
+    .exec(function(err, things) {
+      if (err) {
+	handleError(err, fn);
+	return;
+      }
+      
+      fn(null, things);
+    });
 };
 
 Schema.statics.modify = function(args, fn) {
