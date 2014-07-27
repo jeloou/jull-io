@@ -24,9 +24,64 @@ Run locally:
     $ npm install
     $ npm start
 
-Visit <http://localhost:3000> to marvel at your work. You should have a new and 
-shining instance running locally.
+Visit [localhost:3000](http://localhost:3000/) to marvel at your work. You should have a new and 
+shining instance running locally.  
 
+In order to access to the API functionality you need to create a new user. There's a simple form in [localhost:3000/signup](http://localhost:3000/signup)  that will help with this task. After that, you can start by adding new devices (I'm using [httpie](https://github.com/jakubroztocil/httpie) in those examples)
+
+    $ http post localhost:3000/things name="drone" description="white quadcopter" 'Cookie:_jull.io=<your cookie>'
+    
+    {
+      "id": "53d451ee935a7df5290a91f9", 
+      "name": "drone", 
+      "description": "white quadcopter", 
+      "key": {
+        "key": "0b281230-152b-11e4-a5b7-f950974c1402", 
+        "token": "1840wvv8sk54gqfreief1augkqwa5rk9"
+      }, 
+      "user": {
+        "email": "joseph@jull.io", 
+         "first_name": "Joseph", 
+         "last_name": "Núñez", 
+         "things": [
+           "0b281230-152b-11e4-a5b7-f950974c1402"
+         ]
+      }
+    }
+   
+
+The returned data contains a `key` and a `token` that your device can use as `username` and `password` to connect to the MQTT server. Other methods are also available:
+
+    $ http get localhost:3000/things 'Cookie:_jull.io=<your cookie>'
+    
+    [
+       /* returns a list of things */
+    ]
+    
+    $ http put localhost:3000/things/0b281230-152b-11e4-a5b7-f950974c1402 description="black quadcopter" 'Cookie:_jull.io=<your cookie>'
+    
+    {
+      "id": "53d451ee935a7df5290a91f9", 
+      "name": "drone", 
+      "description": "black quadcopter", 
+      "key": {
+        "key": "0b281230-152b-11e4-a5b7-f950974c1402", 
+        "token": "1840wvv8sk54gqfreief1augkqwa5rk9"
+      }, 
+      "user": {
+        "email": "joseph@jull.io", 
+         "first_name": "Joseph", 
+         "last_name": "Núñez", 
+         "things": [
+           "0b281230-152b-11e4-a5b7-f950974c1402"
+         ]
+      }
+    }
+
+    $ http delete localhost:3000/things/0b281230-152b-11e4-a5b7-f950974c1402 'Cookie:_jull.io=<your cookie>'
+   
+
+    
 ### Contributing 
 This project is in active development but it's not ready. Feel free to open a pull request with a nice feature or a fix for some bug.
 
