@@ -10,6 +10,16 @@ var Schema = new(db.Schema)({
   description: {type: String, trim: true, required: true},
   user: {type: ObjectId, ref: 'User', required: true},
   key: db.Schema.Types.Mixed,
+  radius: {type: Number, min: 0, default: 0},
+  locationUpdated: {type: Boolean, default: false},
+  location: {
+    type: {type: String, default: 'Point'},
+    coordinates: []
+  }
+});
+
+Schema.index({
+  location: '2dsphere'
 });
 
 Schema.methods.toJSON = function() {
@@ -30,6 +40,11 @@ Schema.statics.add = function(args, fn) {
   
   payload = args.payload;
   payload.user = args.user;
+  
+  payload.location = {
+    type: 'Point',
+    coordinates: [0, 0]
+  };
   
   thing = new(this)(payload);
   thing.save(function(err) {
@@ -195,6 +210,30 @@ Schema.statics.remove = function(args, fn) {
     });
 };
 
+Schema.statics.nearTo = function(thing, fn) {
+  if (!thing.locationUpdated || thing.radius == 0) {
+    fn(null, []);
+    return;
+  }
+  
+  this
+    .where('locationUpdated', true)
+    .where('location')
+    .near({
+      center: thing.location.coordinates,
+      maxDistance: thing.radius,
+      spherical: true
+    })
+    .select('_id')
+    .exec(function(err, things) {
+      if (err) {
+	fn(err);
+	return;
+      }
+
+      fn(null, things);
+    });
+};
 
 var Thing = db.model('Thing', Schema);
 Schema.pre('save', function(next) {
