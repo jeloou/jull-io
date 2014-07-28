@@ -15,6 +15,12 @@ duration and distance statistics.
 jull.io uses MongoDB >= 2.4.10 for all the geo-related operations, storing data and
 sessions. Redis >= 2.6.16 for the job queue. In order to connect jull.io to [mosca](https://github.com/mcollina/mosca) you will need to run it using [mqtt-cli](https://github.com/jeloou/mqtt-cli).
  
+### Features
+- Can be easily integrated with any MQTT broker, with just a few tweaks.
+- Supports the creation of geo-fences, and sends notifications when a thing a arrives or leaves certain fence.
+-  Gives things the ability to detect the proximity of other things.
+- Allows every device to broadcast messages.
+
 ### Getting started 
 
 Run locally: 
@@ -100,7 +106,7 @@ Once you've all this ready, It's time to create a couple of fences, which is pre
       "user": "53d5abf190721f224f4f9d41"
     }
 
-Remember you need to finish of the list points with the same point you started it. So, now every device located inside this fence will generate a notification. 
+Remember you need to finish the list of points with the same point you started it. So, now every device located inside this fence will generate a notification. 
 
 ### Contributing 
 This project is in active development but it's not ready. Feel free to open a pull request with a nice feature or a fix for some bug.
