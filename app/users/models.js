@@ -6,6 +6,7 @@ var db = require('mongoose')
 var Schema = new(db.Schema)({
   first_name: {type: String, trim: true},
   last_name: {type: String, trim: true},
+  gender: {type: String,  enum: ['m', 'f']},
   email: {type: String, lowercase: true, trim: true, default: ''},
   hash: {type: String, default: ''},
   salt: {type: String, default: ''},
@@ -25,7 +26,7 @@ Schema
 
 Schema.statics.add = function(data, fn) {
   var user;
-
+  
   user = new(this)(data);
   user.save(function(err) {
     if (err) {

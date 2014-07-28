@@ -5,8 +5,11 @@ $(function() {
     var fields, data = {};
     fields = $(e.target).serializeArray();
     $.each(fields, function(k, field) {
-      data[(field.name == 'options')? 'gender' : field.name] = field.value;
+      if (field.name != 'options') {
+	data[field.name] = field.value;
+      }
     });
+    data['gender'] = $('#gender > .active > input').val();
     
     $.ajax({
       type: 'POST',
