@@ -119,33 +119,37 @@ Schema.statics.add = function(args, fn) {
   if (last && segmment.type == 'move') {
     segmment.points.unshift(last);
   }
-  
-  var Thing = db.model('Thing');
-  Thing.findOne(
-    {'key.key': thing}).select('_id').exec(function(err, thing) {
+
+  segmment.thing = thing._id;
+  segmment = new(that)(segmment);
+  segmment.save(function(err) {
+    if (err) {
+      handleError(err, fn);
+      return;
+    }
+    
+    thing.location = {
+      coordinates: [point.lat, point.lng]
+    };
+    
+    Fence.containing(thing, point, function(err) {
       if (err) {
-	handleError(err, fn);
+	fn(err);
 	return;
       }
       
-      segmment.thing = thing._id;
-      segmment = new(that)(segmment);
-      segmment.save(function(err) {
+      var Thing = db.model('Thing');
+      Thing.nearTo(thing, function(err) {
 	if (err) {
-	  handleError(err, fn);
+	  fn(err);
 	  return;
 	}
 	
-	Fence.containing(thing, point, function(err) {
-	  if (err) {
-	    fn(err);
-	    return;
-	  }
-	  
-	  fn(null);
-	});
+	fn(null);
       });
     });
+    
+  });
 };
 
 Schema.statics.modify = function(args, fn) {
@@ -204,6 +208,10 @@ Schema.statics.modify = function(args, fn) {
 	fn(err);
 	return;
       }
+
+      thing.location = {
+	coordinates: [point.lat, point.lng]
+      };
       
       Fence.containing(thing, point, function(err) {
 	if (err) {
@@ -211,7 +219,15 @@ Schema.statics.modify = function(args, fn) {
 	  return;
 	}
 	
-	fn(null);
+	var Thing = db.model('Thing');
+	Thing.nearTo(thing, function(err) {
+	  if (err) {
+	    fn(err);
+	    return;
+	  }
+	  
+	  fn(null);
+	});
       });
     });
 };
@@ -220,8 +236,16 @@ Schema.statics.last = function(args, fn) {
   var thing = args.thing, that = this;
   
   var Thing = db.model('Thing');
-  Thing.findOne(
-    {'key.key': thing}).select('_id').exec(function(err, thing) {
+  Thing
+    .findOne()
+    .where('key.key', thing)
+    .select('_id radius locationUpdated')
+    .exec(function(err, thing) {
+      if (err) {
+	fn(err);
+	return;
+      }
+
       that
         .find({thing: thing._id}, {points: {$slice: -1}})
 	.sort('-end')
@@ -237,12 +261,12 @@ Schema.statics.last = function(args, fn) {
 	  
 	  segmment = segmments.pop();
 	  if (!segmment) {
-	    fn(null, null);
+	    fn(null, null, thing);
 	    return;
 	  }
 	  
 	  if (!moment(args.at).isSame(segmment.start, 'day')) {
-	    fn(null, null);
+	    fn(null, null, thing);
 	    return;
 	  }
 	  
@@ -254,11 +278,11 @@ Schema.statics.last = function(args, fn) {
 	      args.type = 'stop';
 	      args.last = last;
 
-	      fn(null, null);
+	      fn(null, null, thing);
 	      return;
 	    }
 	    
-	    fn(null, segmment);
+	    fn(null, segmment, thing);
 	    return;
 	  }
 
@@ -266,11 +290,11 @@ Schema.statics.last = function(args, fn) {
 	    args.type = 'move';
 	    args.last = last;
 	    
-	    fn(null, null);
+	    fn(null, null, thing);
 	    return;
 	  }
 	  
-	  fn(null, segmment);
+	  fn(null, segmment, thing);
 	});
     });
 };

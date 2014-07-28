@@ -211,9 +211,17 @@ Schema.statics.remove = function(args, fn) {
 };
 
 Schema.statics.nearTo = function(thing, fn) {
+  var update = false, that = this;
+  
   if (!thing.locationUpdated || thing.radius == 0) {
-    fn(null, []);
-    return;
+    if (thing.radius == 0) {
+      fn(null, []);
+      return;
+    }
+    
+    if (!thing.locationUpdated) {
+      update = true;
+    }
   }
   
   this
@@ -230,8 +238,21 @@ Schema.statics.nearTo = function(thing, fn) {
 	fn(err);
 	return;
       }
-
-      fn(null, things);
+      
+      if (!update) {
+	fn(null, things);
+	return;
+      }
+      
+      thing.locationUpdated = true;
+      thing.save(function(err) {
+	if (err) {
+	  fn(err);
+	  return;
+	}
+	
+	fn(null, things);
+      });
     });
 };
 
