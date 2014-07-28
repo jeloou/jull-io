@@ -41,11 +41,11 @@ In order to access to the API functionality you need to create a new user. There
       }, 
       "user": {
         "email": "joseph@jull.io", 
-         "first_name": "Joseph", 
-         "last_name": "Núñez", 
-         "things": [
-           "0b281230-152b-11e4-a5b7-f950974c1402"
-         ]
+        "first_name": "Joseph", 
+        "last_name": "Núñez", 
+        "things": [
+          "0b281230-152b-11e4-a5b7-f950974c1402"
+        ]
       }
     }
    
@@ -70,18 +70,38 @@ The returned data contains a `key` and a `token` that your device can use as `us
       }, 
       "user": {
         "email": "joseph@jull.io", 
-         "first_name": "Joseph", 
-         "last_name": "Núñez", 
-         "things": [
+        "first_name": "Joseph", 
+        "last_name": "Núñez", 
+        "things": [
            "0b281230-152b-11e4-a5b7-f950974c1402"
-         ]
+        ]
       }
     }
 
     $ http delete localhost:3000/things/0b281230-152b-11e4-a5b7-f950974c1402 'Cookie:_jull.io=<your cookie>'
    
 
+Once you've all this ready, It's time to create a couple of fences, which is pretty simple:
+
+
+    $ http post localhost:3000/fences name="fence" description="just a fence" boundaries:='[[10.4953492, -66.87594589999998], [10.485896847519571, -66.88049492648923], [10.489779098659216, -66.86865029147947], [10.4953492, -66.87594589999998]]' 'Cookie:_jull.io=<your cookie>'
     
+    {
+      "boundaries": [
+        /*  lat, lng */
+        [10.4953492, -66.87594589999998], 
+        [10.485896847519571, -66.88049492648923], 
+        [10.489779098659216, -66.86865029147947], 
+        [10.4953492, -66.87594589999998]
+      ], 
+      "description": "just a fence", 
+      "id": "53d5bc0c2b40de2954ec9fc3", 
+      "name": "fence", 
+      "user": "53d5abf190721f224f4f9d41"
+    }
+
+Remember you need to finish of the list points with the same point you started it. So, now every device located inside this fence will generate a notification. 
+
 ### Contributing 
 This project is in active development but it's not ready. Feel free to open a pull request with a nice feature or a fix for some bug.
 

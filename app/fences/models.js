@@ -26,7 +26,6 @@ Schema.methods.toJSON = function() {
     name: this.name,
     description: this.description,
     user: this.user,
-    things: this.things,
     boundaries: this.boundaries.coordinates.pop()
   };
 };
@@ -161,7 +160,7 @@ Schema.statics.add = function(args, fn) {
       handleError(err, fn);
       return;
     }
-
+    
     fn(null, fence);
   });
 };
